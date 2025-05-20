@@ -1,27 +1,27 @@
 import express from "express";
+
 const app = express();
 const port = process.env.PORT || 3000;
 
-// Import routes
-import indexRouter from "./routes/indexroutes.js";
-
-// Serve static files from the "public" directory
-app.use(express.static("public"));
-
-// Use index routes for the root path
-app.use("/", indexRouter);
-
-// Azure route
-app.get("/azure", (req, res) => {
-  try {
-    res.json({ message: "Successful" });
-  } catch (e) {
-    console.error("Error in /azure route:", e); // Log the error
-    res.status(500).json({ error: "Internal Server Error" }); // Proper status and message
-  }
+// Root route returns simple HTML
+app.get("/", (req, res) => {
+  res.send(`
+    <html>
+      <head><title>Home</title></head>
+      <body>
+        <h1>Welcome to My Azure App</h1>
+        <p>This is a simple HTML page served by Express.</p>
+      </body>
+    </html>
+  `);
 });
 
-// Start the server
+// Azure test route returns JSON
+app.get("/azure", (req, res) => {
+  res.json({ message: "Successful" });
+});
+
+// Start server
 app.listen(port, () => {
   console.log(`Server running at http://localhost:${port}`);
 });
